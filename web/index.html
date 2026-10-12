@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <!--
+    If you are serving your web app in a path other than the root, change the
+    href value below to reflect the base path you are serving from.
+
+    The path provided below has to start and end with a slash "/" in order for
+    it to work correctly.
+
+    For more details:
+    * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base
+
+    This is a placeholder for base href that will be replaced by the value of
+    the `--base-href` argument provided to `flutter build`.
+  -->
+  <base href="$FLUTTER_BASE_HREF">
+
+  <meta charset="UTF-8">
+  <meta content="IE=Edge" http-equiv="X-UA-Compatible">
+  <meta
+    name="description"
+    content="MASTERA 24 - сервис для поиска мастеров, специалистов разных сфер и размещения заявок в Казахстане, России и странах СНГ."
+  >
+  <meta name="robots" content="index, follow">
+  <meta name="googlebot" content="index, follow">
+  <meta name="yandex" content="index, follow">
+  <meta name="keywords" content="MASTERA 24, мастера 24, найти мастера, услуги специалистов, Казахстан, Россия, СНГ, ремонт, грузчики, сантехник, электрик">
+  <link rel="canonical" href="https://mastera24.com/">
+
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://mastera24.com/">
+  <meta property="og:title" content="MASTERA 24 - сервис поиска специалистов">
+  <meta property="og:description" content="Сервис поиска специалистов разных сфер в Казахстане, России и странах СНГ.">
+  <meta property="og:image" content="https://mastera24.com/icons/Icon-512.png">
+  <meta property="og:site_name" content="MASTERA 24">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="MASTERA 24 - сервис поиска специалистов">
+  <meta name="twitter:description" content="Сервис поиска специалистов разных сфер в Казахстане, России и странах СНГ.">
+  <meta name="twitter:image" content="https://mastera24.com/icons/Icon-512.png">
+
+  <!-- iOS meta tags & icons -->
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="MASTERA 24">
+  <link rel="apple-touch-icon" href="icons/Icon-192.png">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="favicon.png"/>
+
+  <title>MASTERA 24</title>
+  <link rel="manifest" href="manifest.json">
+</head>
+<body>
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.getRegistrations().then((registrations) => {
+        registrations.forEach((registration) => registration.unregister());
+      });
+    }
+    if ('caches' in window) {
+      caches.keys().then((keys) => {
+        keys.forEach((key) => caches.delete(key));
+      });
+    }
+  </script>
+  <script src="flutter_bootstrap.js?v=20260804-2" async></script>
+</body>
+</html>

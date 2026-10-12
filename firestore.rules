@@ -1,0 +1,142 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function currentUserPath() {
+      return /databases/$(database)/documents/users/$(request.auth.uid);
+    }
+
+    function currentUserExists() {
+      return isSignedIn() && exists(currentUserPath());
+    }
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      return currentUserExists() &&
+        get(currentUserPath()).data.role == 'admin';
+    }
+
+    function isBlocked() {
+      return currentUserExists() &&
+        get(currentUserPath()).data.status == 'blocked';
+    }
+
+    function isCustomerOrExecutor(role) {
+      return role in ['customer', 'executor'];
+    }
+
+    match /users/{userId} {
+      allow read: if isSignedIn() && !isBlocked() || isAdmin();
+      allow create: if isSignedIn() &&
+        request.auth.uid == userId &&
+        isCustomerOrExecutor(request.resource.data.role) &&
+        request.resource.data.status == 'active';
+      allow update: if isAdmin() || (
+        isSignedIn() &&
+        request.auth.uid == userId &&
+        !isBlocked() &&
+        request.resource.data.status == resource.data.status &&
+        (
+          (resource.data.role == 'admin' && request.resource.data.role == 'admin') ||
+          (resource.data.role != 'admin' && isCustomerOrExecutor(request.resource.data.role))
+        )
+      );
+      allow delete: if false;
+    }
+
+    match /jobs/{jobId} {
+      allow read: if isSignedIn() && !isBlocked() || isAdmin();
+      allow create: if isSignedIn() && request.resource.data.customerId == request.auth.uid && !isBlocked();
+      allow update, delete: if (isSignedIn() && resource.data.customerId == request.auth.uid && !isBlocked()) || isAdmin();
+    }
+
+    match /bids/{bidId} {
+      allow read: if isSignedIn() && !isBlocked() || isAdmin();
+      allow create: if isSignedIn() && request.resource.data.executorId == request.auth.uid && !isBlocked();
+      allow update: if isSignedIn() && (
+        (resource.data.executorId == request.auth.uid &&
+          request.resource.data.diff(resource.data).changedKeys().hasOnly(['status', 'updatedAt']) &&
+          request.resource.data.status in ['withdrawn', 'cancelled']) ||
+        (resource.data.customerId == request.auth.uid &&
+          request.resource.data.diff(resource.data).changedKeys().hasOnly(['status', 'updatedAt', 'acceptedAt']) &&
+          request.resource.data.status in ['accepted', 'rejected'])
+      ) || isAdmin();
+      allow delete: if false;
+    }
+
+    match /chats/{chatId} {
+      allow read: if isAdmin() || (isSignedIn() &&
+        !isBlocked() &&
+        (resource.data.customerId == request.auth.uid ||
+         resource.data.executorId == request.auth.uid));
+      allow create, update: if isAdmin() || (isSignedIn() &&
+        !isBlocked() &&
+        (request.resource.data.customerId == request.auth.uid ||
+         request.resource.data.executorId == request.auth.uid));
+
+      match /messages/{messageId} {
+        allow read: if isAdmin() || (isSignedIn() &&
+          !isBlocked() &&
+          (get(/databases/$(database)/documents/chats/$(chatId)).data.customerId == request.auth.uid ||
+           get(/databases/$(database)/documents/chats/$(chatId)).data.executorId == request.auth.uid));
+        allow create: if isAdmin() || (isSignedIn() &&
+          !isBlocked() &&
+          request.resource.data.senderId == request.auth.uid &&
+          (get(/databases/$(database)/documents/chats/$(chatId)).data.customerId == request.auth.uid ||
+           get(/databases/$(database)/documents/chats/$(chatId)).data.executorId == request.auth.uid));
+        allow update, delete: if false;
+      }
+    }
+
+    match /payments/{paymentId} {
+      allow read: if isAdmin() || (isSignedIn() && resource.data.executorId == request.auth.uid);
+      allow write: if false;
+    }
+
+    match /settings/{docId} {
+      allow read: if isSignedIn();
+      allow write: if isAdmin();
+    }
+
+    match /notifications/{notificationId} {
+      allow read: if isAdmin() || (
+        isSignedIn() &&
+        resource.data.recipientId == request.auth.uid &&
+        !isBlocked()
+      );
+      allow update: if isSignedIn() &&
+        resource.data.recipientId == request.auth.uid &&
+        request.resource.data.diff(resource.data).changedKeys().hasOnly(['readAt', 'updatedAt']) &&
+        !isBlocked();
+      allow create, delete: if false;
+    }
+
+    match /reviews/{reviewId} {
+      allow read: if isSignedIn() && !isBlocked() || isAdmin();
+      allow create: if isAdmin() || (
+        isSignedIn() &&
+        !isBlocked() &&
+        request.auth.uid == request.resource.data.customerId &&
+        request.resource.data.bidId == reviewId &&
+        exists(/databases/$(database)/documents/bids/$(reviewId)) &&
+        get(/databases/$(database)/documents/bids/$(reviewId)).data.customerId == request.auth.uid &&
+        get(/databases/$(database)/documents/bids/$(reviewId)).data.executorId == request.resource.data.executorId &&
+        get(/databases/$(database)/documents/bids/$(reviewId)).data.jobId == request.resource.data.jobId &&
+        get(/databases/$(database)/documents/bids/$(reviewId)).data.status in ['submitted', 'accepted']
+      );
+      allow update: if isAdmin() || (
+        isSignedIn() &&
+        !isBlocked() &&
+        request.auth.uid == resource.data.customerId &&
+        request.auth.uid == request.resource.data.customerId &&
+        request.resource.data.bidId == resource.data.bidId &&
+        request.resource.data.executorId == resource.data.executorId &&
+        request.resource.data.jobId == resource.data.jobId &&
+        request.resource.data.createdAt == resource.data.createdAt
+      );
+      allow delete: if false;
+    }
+  }
+}

@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <rect width="1024" height="1024" rx="232" fill="#0F172A"/>
+  <circle cx="820" cy="210" r="84" fill="#60A5FA" opacity="0.18"/>
+  <text x="196" y="618"
+        font-family="Helvetica Neue, Arial, sans-serif"
+        font-size="470"
+        font-weight="800"
+        fill="#FFFFFF">M</text>
+  <rect x="590" y="610" width="258" height="148" rx="74" fill="#2563EB"/>
+  <text x="719" y="706"
+        text-anchor="middle"
+        font-family="Helvetica Neue, Arial, sans-serif"
+        font-size="126"
+        font-weight="800"
+        fill="#FFFFFF">24</text>
+</svg>

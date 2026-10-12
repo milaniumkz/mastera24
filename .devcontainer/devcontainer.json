@@ -1,0 +1,16 @@
+{
+  "name": "Mastera24",
+  "build": { "dockerfile": "Dockerfile" },
+  "remoteUser": "vscode",
+  "features": {
+    "ghcr.io/devcontainers/features/node:1": { "version": "20" }
+  },
+  "postCreateCommand": "flutter pub get && npm ci --prefix functions",
+  "forwardPorts": [8080],
+  "portsAttributes": {
+    "8080": { "label": "Mastera24 web", "onAutoForward": "notify" }
+  },
+  "customizations": {
+    "vscode": { "extensions": ["Dart-Code.flutter", "Dart-Code.dart-code"] }
+  }
+}

@@ -1,0 +1,7 @@
+<resources>
+    <string name="epay_client_id">__SET_EPAY_CLIENT_ID__</string>
+    <string name="epay_client_secret">__SET_EPAY_CLIENT_SECRET__</string>
+    <string name="epay_terminal_id">__SET_EPAY_TERMINAL_ID__</string>
+    <string name="epay_merchant_name">Mastera24</string>
+    <bool name="epay_is_test">false</bool>
+</resources>

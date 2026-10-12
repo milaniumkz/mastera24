@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "311694726",
+    "project_id": "mastera24-b48e2",
+    "storage_bucket": "mastera24-b48e2.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:311694726:android:1166abc986602c8ff40807",
+        "android_client_info": {
+          "package_name": "kz.milanium.mastera24"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "311694726-pltke29a4ligum5ujbi2k5ffepeie9ub.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD7gZIdQcRf85fbLxoMTUZ9diteUL1BX4Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "311694726-pltke29a4ligum5ujbi2k5ffepeie9ub.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "311694726-l1fidla7e77i69s7jsud3qh258nfs4st.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "kz.milanium.mastera24"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
